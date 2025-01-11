@@ -5,295 +5,60 @@
   <title>Food Planner</title>
   <!-- WICHTIG: Viewport-Meta-Tag für mobile Endgeräte -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
   <style>
-    /* ---------- Globales Layout & Farben ---------- */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    /* Beispielhafte Farbakzente (bitte in deiner style.css verfeinern) */
+    .highlight-green { background-color: #a3d9a5 !important; }
+    .highlight-blue { background-color: #a5c6d9 !important; }
+    .highlight-red { background-color: #d9a5a5 !important; }
+    .highlight-purple { background-color: #c6a5d9 !important; }
+    .highlight-orange { background-color: #d9c6a5 !important; }
 
-    body {
-      font-family: "Segoe UI", Tahoma, sans-serif;
-      font-size: 16px;       /* Größere Schrift für mobile */
-      line-height: 1.4;      /* Angenehme Zeilenhöhe */
-      background: #ffffff;   /* Hauptfarbe */
-      color: #333;
-    }
-
-    header {
-      background: #3D4127; /* Akzentfarbe */
-      color: #fff;
-      padding: 1rem;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.25rem; /* Überschrift etwas größer als der Body-Text */
-    }
-
-    /* Zurücksetzen-Button jetzt NICHT mehr position: absolute;
-       sondern normal im Dokumentenfluss */
-    #resetBtn {
-      background: #636B2F; /* Button-Farbe */
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-size: 1rem;
-      border-radius: 4px;
-      transition: background 0.2s ease-in-out;
-      margin-top: 1rem;
-      margin-bottom: 1.5rem; /* Abstand nach unten zu den Boxen */
-    }
-    #resetBtn:hover {
-      background: #BAC095; /* Hover-Farbe */
-    }
-
-    main {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 1rem 2rem;
-    }
-
-    /* ---------- Container-Grid: bis zu 3 Spalten ----------
-       Auf sehr schmalen Geräten ( <300px ) automatisch 1 Spalte */
-    .container-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .section-card {
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-    }
-
-    .section-card h2 {
-      margin-bottom: 0.8rem;
-      color: #3D4127; /* Akzentfarbe */
-      font-size: 1.1rem;
-    }
-
-    /* ---------- Allgemeine Buttons (z.B. Tage generieren etc.) ---------- */
-    button {
-      background: #636B2F; /* Button-Farbe */
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1.25rem;
-      cursor: pointer;
-      font-size: 1rem;
-      border-radius: 4px;
-      transition: background 0.2s ease-in-out;
-      margin-top: 1rem;
-    }
-    button:hover {
-      background: #BAC095; /* Hover-Farbe */
-    }
-
-    /* ---------- Versteckt-Klasse ---------- */
-    .hidden {
+    /* Standardmäßig alle Bereiche (außer #section1) ausblenden */
+    #section2, #section3, #section4, #section5, #section6, #section7, 
+    #final-buttons-id {
       display: none;
     }
 
-    /* ---------- Abschnitt 2: Tägliche Mahlzeiten/Portionen ---------- */
-    .meal-checkbox-group {
-      margin: 0.5rem 0;
-      font-size: 1rem;
-    }
-    .meal-checkbox-group select {
-      margin-left: 0.5rem;
-    }
-
-    /* ---------- Tagesliste (Ausnahmen) ---------- */
-    #dayList > div {
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    .day-exception-meals {
-      margin-left: 1.5rem;
-      margin-top: 0.5rem;
-    }
-    .day-exception-meals select {
-      margin-left: 0.5rem;
-    }
-
-    /* ---------- Wünsche (Abschnitt 4) ---------- */
-    #freeWishesContainer {
-      margin-top: 0.5rem;
-    }
-    #freeWishesContainer input[type="text"] {
-      margin: 0.3rem 0;
-      font-size: 1rem;
-    }
-
-    /* ---------- Nährwerte (Abschnitt 5) ---------- */
-    #section5 label {
-      width: 130px;
-      font-weight: 600;
-      display: inline-block;
-      margin-right: 0.5rem;
-    }
-    #section5 input[type="number"] {
-      width: 100px;
-      margin-right: 0.5rem;
-    }
-
-    /* ---------- Vorkochen (Abschnitt 6) ---------- */
-    .vorkochen-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-    .vorkochen-day {
-      background: #fdfdfd;
-      border: 1px solid #ddd;
-      padding: 0.8rem;
-      border-radius: 6px;
-      position: relative;
-      font-size: 1rem;
-    }
-    .vorkochen-day strong {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    .vorkochen-meal {
-      border: 1px dashed #999;
-      margin: 0.4rem 0;
-      padding: 0.4rem;
-      border-radius: 4px;
-      cursor: pointer;
-      background: #fafafa;
-      transition: background 0.2s;
-    }
-    .vorkochen-meal:hover {
-      background: #f1f1f1;
-    }
-    .highlight-green {
-      background: #c3f3c3 !important; /* Hellgrün */
-    }
-    .highlight-blue {
-      background: #add8e6 !important; /* Hellblau */
-    }
+    /* Beispielhaft für Kronen-Symbol */
     .crown {
-      font-size: 1.2rem;
-      color: gold;
-      margin-right: 0.3rem;
-    }
-
-    /* ---------- Fleisch/Fisch-Liste (Abschnitt 7) ---------- */
-    .fleschfisch-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-top: 1rem;
-      font-size: 1rem;
-    }
-    .fleschfisch-item {
-      border: 1px solid #ddd;
-      padding: 0.5rem;
-      background: #fafafa;
-      border-radius: 4px;
-    }
-    .fleschfisch-item select {
-      margin-left: 0.5rem;
-    }
-
-    /* ---------- Modal/Popup ---------- */
-    #promptModal {
-      position: fixed;
-      top: 0; 
-      left: 0;
-      width: 100%; 
-      height: 100%; 
-      background: rgba(0,0,0,0.5);
-      display: none; /* Standard: versteckt */
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      overflow: auto; /* Falls Inhalte höher als Bildschirm */
-    }
-    #promptModal.active {
-      display: flex; /* Sichtbar, als Flex */
-    }
-    .modal-content {
-      background: #ffffff;
-      width: 90%;
-      max-width: 600px;
-      max-height: 90vh; /* Nicht höher als 90% der Bildschirmhöhe */
-      padding: 1rem;
-      border-radius: 8px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      box-sizing: border-box;
-    }
-    .modal-close {
-      position: absolute;
-      top: 0.5rem;
-      right: 0.5rem;
-      cursor: pointer;
-      font-size: 1.2rem;
-      color: #333;
-      font-weight: bold;
-    }
-    #promptText {
-      background: #f9f9f9;
-      padding: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      color: #333;
-      margin: 1rem 0;
-      flex: 1 1 auto;           /* Damit dieses Element den freien Platz nutzt */
-      overflow-y: auto;        /* Scrollbar, falls der Text zu lang ist */
-      font-size: 1rem;
-    }
-    #copyBtn {
-      align-self: flex-end;    /* Rechts unten platzieren */
-      margin-top: 0;
+      margin-right: 4px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Food Planner</h1>
-	<p>Erstelle hiermit einen KI-Prompt, der dir im handumdrehen einen Menuplan inklusive Einkaufsliste erstellt</p>
-  </header>
+  <header></header>
 
   <main>
-    <!-- Zurücksetzen-Button JETZT unterhalb Header -->
-    <button id="resetBtn" onclick="resetAll()">Zurücksetzen</button>
-
     <!-- Grid-Container für alle Bereiche -->
     <div class="container-grid">
 
       <!-- Bereich 1: Zeitraum -->
       <div class="section-card" id="section1">
-        <h2>1. Zeitraum auswählen</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➀</h1>
+        <h2 style="display: inline;">ZEITRAUM AUSWÄHLEN</h2> <br><br>
         <label for="startDate">Startdatum:</label>
         <input type="date" id="startDate" style="font-size: 1rem;" />
         <br><br>
         <label for="endDate">Enddatum:</label>
         <input type="date" id="endDate" style="font-size: 1rem;" />
+        <br><br>
+        <button type="button" onclick="generateDayList()">Bestätigen</button>
       </div>
 
       <!-- Bereich 2: Tägliche Mahlzeiten/Portionen -->
       <div class="section-card" id="section2">
-        <h2>2. Tägliche Mahlzeiten/Portionen</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➁</h1>
+        <h2 style="display: inline;">TÄGLICHE MAHLZEITEN & PORTIONEN</h2> <br><br>
         <p style="font-size: 1rem;">
-          Wähle aus, welche Mahlzeiten du <strong>standardmäßig</strong> pro Tag haben möchtest (Checkbox).  
-          Wenn du eine Mahlzeit aktivierst, erscheint rechts daneben eine <strong>Portionsauswahl (1–10)</strong>.
+          Wähle aus, welche Mahlzeiten und Portionen du <strong>standardmässig</strong> pro Tag haben möchtest.
         </p>
-        
+
         <div class="meal-checkbox-group">
           <input type="checkbox" id="cbFruehstueck" 
                  onchange="togglePortionDropdown('cbFruehstueck','ddFruehstueck')">
           <label for="cbFruehstueck">Frühstück</label>
-          <select id="ddFruehstueck" class="hidden">
+          <select id="ddFruehstueck" class="hidden" onchange="getStandardMeals()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -305,7 +70,7 @@
           <input type="checkbox" id="cbZnueni" 
                  onchange="togglePortionDropdown('cbZnueni','ddZnueni')">
           <label for="cbZnueni">Znüni</label>
-          <select id="ddZnueni" class="hidden">
+          <select id="ddZnueni" class="hidden" onchange="getStandardMeals()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -317,7 +82,7 @@
           <input type="checkbox" id="cbMittag" 
                  onchange="togglePortionDropdown('cbMittag','ddMittag')">
           <label for="cbMittag">Mittagessen</label>
-          <select id="ddMittag" class="hidden">
+          <select id="ddMittag" class="hidden" onchange="getStandardMeals()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -329,7 +94,7 @@
           <input type="checkbox" id="cbZvieri"
                  onchange="togglePortionDropdown('cbZvieri','ddZvieri')">
           <label for="cbZvieri">Zvieri</label>
-          <select id="ddZvieri" class="hidden">
+          <select id="ddZvieri" class="hidden" onchange="getStandardMeals()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -341,7 +106,7 @@
           <input type="checkbox" id="cbAbend"
                  onchange="togglePortionDropdown('cbAbend','ddAbend')">
           <label for="cbAbend">Abendessen</label>
-          <select id="ddAbend" class="hidden">
+          <select id="ddAbend" class="hidden" onchange="getStandardMeals()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -353,23 +118,19 @@
 
       <!-- Bereich 3: Auflistung der Tage (Ausnahmen) -->
       <div class="section-card" id="section3">
-        <h2>3. Ausnahmen für einzelne Tage</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➂</h1>
+        <h2 style="display: inline;">AUSNAHME FÜR EINZELNE TAGE</h2> <br><br>
         <p style="font-size: 1rem;">
-          Wähle Start- und Enddatum (oben) und klicke dann auf „Tage generieren“.  
-          Für jeden Tag kannst du optional eine Ausnahme aktivieren.  
-          Wenn du sie aktivierst, kannst du abweichende Mahlzeiten auswählen.
+          Für jeden Tag kannst du optional Ausnahmen definieren. 
+          Wähle dazu den Tag aus und die Mahlzeiten, sowie Anzahl Portionen.
         </p>
-        <button type="button" onclick="generateDayList()">Tage generieren</button>
         <div id="dayList"></div>
       </div>
 
       <!-- Bereich 4: Wünsche -->
       <div class="section-card" id="section4">
-        <h2>4. Mögliche Wünsche</h2>
-        <p style="font-size: 1rem;">
-          Wähle hier aus, was auf deinen Menuplan besonders zutreffen soll.
-          Zusätzlich kannst du eigene Wünsche eingeben (Enter drückt ein neues Freitextfeld nach).
-        </p>
+        <h1 style="display: inline; margin-right: 0.5rem;">➃</h1>
+        <h2 style="display: inline;">ESSENSWÜNSCHE</h2> <br><br>
 
         <div style="font-size: 1rem;">
           <input type="checkbox" id="wunschVegan">
@@ -381,7 +142,7 @@
         </div>
 
         <div id="freeWishesContainer">
-          <label><strong>+ Anderer Wunsch</strong>:</label><br>
+          <label><strong>+ Eigener Wunsch</strong>:</label><br>
           <!-- Erstes Freitextfeld -->
           <input
             type="text"
@@ -394,53 +155,58 @@
 
       <!-- Bereich 5: Nährwerte -->
       <div class="section-card" id="section5">
-        <h2>5. Gewünschte Nährwerte (pro Tag)</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➄</h1>
+        <h2 style="display: inline;">NÄHRWERTE (PRO TAG)</h2> <br><br>
+        <p style="font-size: 1rem;">
+          Du kannst hier deine gewünschten Nährwerte pro Tag angeben. Standardmässig sind 100g Protein, 200g Kohlenhydrate und 50g Fett eingetragen.
+        </p>
+        <br><br>
         <!-- Protein -->
         <label>Protein:</label>
-        <input type="number" id="protein" min="0" step="1" placeholder="0" /> g
+        <input type="number" id="protein" min="0" step="1" placeholder="100" /> g
         <br><br>
         <!-- Kohlenhydrate -->
         <label>Kohlenhydrate:</label>
-        <input type="number" id="carbs" min="0" step="1" placeholder="0" /> g
+        <input type="number" id="carbs" min="0" step="1" placeholder="200" /> g
         <br><br>
         <!-- Fett -->
         <label>Fett:</label>
-        <input type="number" id="fat" min="0" step="1" placeholder="0" /> g
+        <input type="number" id="fat" min="0" step="1" placeholder="50" /> g
       </div>
 
       <!-- Bereich 6: Vorkochen -->
       <div class="section-card" id="section6">
-        <h2>6. Vorkochen</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➅</h1>
+        <h2 style="display: inline;">FOOD-PREPPING</h2> <br><br>
         <p style="font-size: 1rem;">
-          Alle Tage (und Mahlzeiten) werden hier als Kacheln dargestellt.  
-          1. Klick = Quellgericht (wird farbig + Krone)  
-          2. Klick = Zielgericht (gleiche Farbe).  
-          So weißt du, welches Gericht für welchen Tag vorgekocht wird.
+          Hier kannst du Mahlzeiten vorkochen. 
+          <br><br>          
+          1. Wähle das Gericht (👑) aus, das du doppelt kochen möchtest. <br>
+          2. Klicke auf ein weiteres Gericht, um es mit dem ersten Gericht (👑) zu verknüpfen.
+          <br><br>  
+          Du erkennst die Verknüpfung an der Farbe.
         </p>
-        <button type="button" onclick="buildVorkochenGrid()">Vorkochen-Kacheln erstellen/aktualisieren</button>
+        <button type="button" onclick="buildVorkochenGrid()">Anzeigen</button>
         <div class="vorkochen-grid" id="vorkochenGrid"></div>
       </div>
 
       <!-- Bereich 7: Fleisch/Fisch -->
       <div class="section-card" id="section7">
-        <h2>7. Fleisch / Fisch</h2>
+        <h1 style="display: inline; margin-right: 0.5rem;">➆</h1>
+        <h2 style="display: inline;font-style: italic;">OPTIONAL: TÄGLICHE ESSENSWÜNSCHE</h2> <br><br>
         <p style="font-size: 1rem;">
-          Optional: Wähle an bestimmten Tagen, ob du Fleisch oder Fisch kochen möchtest.
+          Wähle an bestimmten Tagen, ob du Fleisch oder Fisch kochen möchtest.
         </p>
-        <button type="button" onclick="buildFleischFischList()">Fleisch/Fisch-Liste erstellen/aktualisieren</button>
+        <button type="button" onclick="buildFleischFischList()">Anzeigen</button>
         <div class="fleschfisch-list" id="fleischFischList"></div>
       </div>
-
-      <!-- Bereich: Prompt generieren -->
-      <div class="section-card">
-        <h2>Prompt generieren</h2>
-        <p style="font-size: 1rem;">
-          Klicke auf den Button, um alle Angaben in einem Prompt zusammenzufassen (zum Kopieren in ChatGPT).
-        </p>
-        <button type="button" onclick="generatePrompt()">Prompt generieren</button>
-      </div>
-
     </div><!-- /.container-grid -->
+    <!-- Bereich: Prompt generieren + Zurücksetzen -->
+    <div class="final-buttons" id="final-buttons-id" style="">
+      <button type="button2" onclick="resetAll()" style="margin: 10px; background-color: rgb(147, 29, 29);">Daten löschen</button>
+      <button type="button" onclick="generatePrompt()" style="margin: 10px;"> 
+        Prompt generieren</button>
+    </div>
   </main>
 
   <!-- Modal für den Prompt -->
@@ -449,7 +215,7 @@
       <span class="modal-close" onclick="closePromptModal()">×</span>
       <h3 style="font-size: 1.1rem;">Dein generierter Prompt</h3>
       <div id="promptText"></div>
-      <button id="copyBtn" onclick="copyPrompt()">Prompt kopieren</button>
+      <button id="copyBtn" onclick="copyPrompt()"> Prompt kopieren</button>
     </div>
   </div>
 
@@ -461,7 +227,15 @@
     let customWishes = []; 
     let vorkochenPairs = []; 
     let fleischFischData = {}; 
-    const pairColors = ["highlight-green", "highlight-blue"];
+
+    // Mehrere Farben, damit man zusammengehörige Paare gut erkennt
+    const pairColors = [
+      "highlight-green", 
+      "highlight-blue", 
+      "highlight-red", 
+      "highlight-purple",
+      "highlight-orange"
+    ];
     let currentPairIndex = 0;
     let selectedForVorkochen = null;
 
@@ -544,6 +318,7 @@
           meals.push({ name: "Abendessen", portions });
         }
       }
+      console.log("Standard-Meals:", meals);
       return meals;
     }
 
@@ -553,6 +328,7 @@
     function generateDayList() {
       const startDateVal = document.getElementById("startDate").value;
       const endDateVal = document.getElementById("endDate").value;
+
       if (!startDateVal || !endDateVal) {
         alert("Bitte Start- und Enddatum eingeben.");
         return;
@@ -575,12 +351,15 @@
           date: dateStr,
           weekday: getWeekdayName(currentDate),
           isException: false,
-          meals: JSON.parse(JSON.stringify(standardMeals)) // Kopie
+          // Kopie der Standard-Meals
+          meals: JSON.parse(JSON.stringify(standardMeals))
         });
         currentDate = addOneDay(currentDate);
       }
 
       renderDayList();
+      // Wenn wir es bis hier geschafft haben, blenden wir die weiteren Bereiche ein
+      showOtherSections();
     }
 
     function renderDayList() {
@@ -601,6 +380,9 @@
       });
     }
 
+    // KORREKTUR: Bei Ausnahme starten wir NICHT mit einem leeren Array,
+    // sondern übernehmen zunächst die Standard-Meals und lassen den User
+    // davon ausgehend Dinge an-/abwählen.
     function toggleDayException(dayIndex, isChecked) {
       dayData[dayIndex].isException = isChecked;
       const mealsDiv = document.getElementById(`exceptionMeals_${dayIndex}`);
@@ -609,24 +391,41 @@
         mealsDiv.classList.remove("hidden");
         mealsDiv.innerHTML = "";
 
+        // Falls der Tag bisher noch keine (oder leere) Meals hat, 
+        // befüllen wir ihn wieder mit dem Standard. 
+        // So können Nutzer:innen einzelne Meals wegnehmen oder anpassen.
+        if (!dayData[dayIndex].meals || dayData[dayIndex].meals.length === 0) {
+          dayData[dayIndex].meals = JSON.parse(JSON.stringify(getStandardMeals()));
+        }
+
+        // Für jede mögliche Mahlzeit ein UI-Element anzeigen
         ["Frühstück","Znüni","Mittagessen","Zvieri","Abendessen"].forEach(meal => {
           const mealId = `${dayIndex}_${meal}`;
+          // Prüfen, ob die Mahlzeit schon in dayData[dayIndex].meals enthalten ist
+          const isInMeals = dayData[dayIndex].meals.some(m => m.name === meal);
+          
           const mealRow = document.createElement("div");
           mealRow.innerHTML = `
-            <input type="checkbox" id="cb_${mealId}" onchange="toggleExceptionMealDropdown(${dayIndex}, '${mealId}')">
+            <input type="checkbox" id="cb_${mealId}" ${isInMeals ? "checked" : ""} onchange="toggleExceptionMealDropdown(${dayIndex}, '${mealId}')">
             <label for="cb_${mealId}">${meal}</label>
-            <select id="dd_${mealId}" class="hidden">
+            <select id="dd_${mealId}" class="${isInMeals ? "" : "hidden"}">
               <option value="">-- Portionen --</option>
               ${[1,2,3,4,5,6,7,8,9,10].map(n => `<option>${n}</option>`).join("")}
             </select>
           `;
           mealsDiv.appendChild(mealRow);
-        });
 
-        // Leere dayData[dayIndex].meals für Ausnahme (wir setzen manuell)
-        dayData[dayIndex].meals = [];
+          // Wenn die Mahlzeit bereits in dayData vorhanden ist, passenden Wert im Dropdown setzen
+          if (isInMeals) {
+            const existingMeal = dayData[dayIndex].meals.find(m => m.name === meal);
+            if (existingMeal && existingMeal.portions) {
+              const ddSelect = mealRow.querySelector(`#dd_${mealId}`);
+              ddSelect.value = existingMeal.portions;
+            }
+          }
+        });
       } else {
-        // Keine Ausnahme -> Standardmeals
+        // Keine Ausnahme -> zurück zu Standardmeals
         const standardMeals = getStandardMeals();
         dayData[dayIndex].meals = JSON.parse(JSON.stringify(standardMeals));
         mealsDiv.innerHTML = "";
@@ -640,8 +439,12 @@
       const mealName = mealId.split("_")[1]; 
       if (cb.checked) {
         dd.classList.remove("hidden");
-        // Standard = 1
-        dayData[dayIndex].meals.push({ name: mealName, portions: 1 });
+        // Standard = 1, falls noch nicht vorhanden
+        let mealObj = dayData[dayIndex].meals.find(m => m.name === mealName);
+        if (!mealObj) {
+          dayData[dayIndex].meals.push({ name: mealName, portions: 1 });
+          dd.value = "1";
+        }
       } else {
         dd.classList.add("hidden");
         dd.value = "";
@@ -692,12 +495,18 @@
      * (6) Vorkochen-Kacheln
      ***********************************************/
     function buildVorkochenGrid() {
+      generateDayList(); // Sicherheitshalber neu rendern
+
+      // 1) Prüfen, ob es überhaupt dayData gibt
+      if (!dayData || dayData.length === 0) {
+        alert("Bitte zuerst einen Zeitraum auswählen und bestätigen!");
+        return;
+      }
+
       const grid = document.getElementById("vorkochenGrid");
       grid.innerHTML = "";
 
       dayData.forEach((day, dIndex) => {
-        if (day.meals.length === 0) return;
-
         const dayBox = document.createElement("div");
         dayBox.classList.add("vorkochen-day");
         dayBox.innerHTML = `<strong>${day.weekday}, ${day.date}</strong>`;
@@ -707,19 +516,28 @@
           mealDiv.classList.add("vorkochen-meal");
           mealDiv.innerText = `${meal.name} (${meal.portions}x)`;
 
-          const existingPair = vorkochenPairs.find(pr => {
-            return (pr.sourceDayIndex===dIndex && pr.sourceMealIndex===mIndex) 
-                || (pr.targetDayIndex===dIndex && pr.targetMealIndex===mIndex);
+          // Prüfen, ob dieses Meal Teil eines bestehenden Paares ist
+          const existingPairIndex = vorkochenPairs.findIndex(pr => {
+            return (
+              (pr.sourceDayIndex === dIndex && pr.sourceMealIndex === mIndex) ||
+              (pr.targetDayIndex === dIndex && pr.targetMealIndex === mIndex)
+            );
           });
-          if (existingPair) {
-            mealDiv.classList.add(existingPair.colorClass);
-            if (existingPair.sourceDayIndex===dIndex && existingPair.sourceMealIndex===mIndex) {
+
+          if (existingPairIndex >= 0) {
+            // Hat ein Pair
+            const pairObj = vorkochenPairs[existingPairIndex];
+            mealDiv.classList.add(pairObj.colorClass);
+
+            // Ist es der Quell-Teil (Quelle = Krone)?
+            if (pairObj.sourceDayIndex === dIndex && pairObj.sourceMealIndex === mIndex) {
               mealDiv.innerHTML = `<span class="crown">👑</span>${mealDiv.innerText}`;
             }
           }
 
+          // Klick-Event
           mealDiv.addEventListener("click", () => {
-            handleVorkochenClick(dIndex, mIndex, mealDiv);
+            handleVorkochenClick(dIndex, mIndex);
           });
 
           dayBox.appendChild(mealDiv);
@@ -729,28 +547,94 @@
       });
     }
 
-    function handleVorkochenClick(dayIndex, mealIndex, mealDiv) {
-      if (!selectedForVorkochen) {
-        selectedForVorkochen = { dayIndex, mealIndex };
-        const colorClass = pairColors[currentPairIndex];
-        mealDiv.classList.add(colorClass);
-        mealDiv.innerHTML = `<span class="crown">👑</span>${mealDiv.innerText}`;
-        selectedForVorkochen.colorClass = colorClass;
-      } else {
-        if (selectedForVorkochen.dayIndex===dayIndex && selectedForVorkochen.mealIndex===mealIndex) {
-          alert("Gleiche Mahlzeit kann nicht Ziel sein. Bitte eine andere Mahlzeit wählen.");
-          return;
+    function handleVorkochenClick(dayIndex, mealIndex) {
+      // 1) Prüfen, ob die geklickte Mahlzeit bereits in pairs existiert
+      const pairIdx = vorkochenPairs.findIndex(p => 
+        (p.sourceDayIndex === dayIndex && p.sourceMealIndex === mealIndex) ||
+        (p.targetDayIndex === dayIndex && p.targetMealIndex === mealIndex)
+      );
+
+      // Wenn sie existiert => Toggle/Entfernen
+      if (pairIdx >= 0) {
+        const pairObj = vorkochenPairs[pairIdx];
+        // Wenn die geklickte Mahlzeit das Quellgericht war => wir löschen den Ziel-Tag
+        const isSourceClicked = (
+          pairObj.sourceDayIndex === dayIndex && 
+          pairObj.sourceMealIndex === mealIndex
+        );
+
+        // Ziel-Tag herausfinden
+        const targetDayIdx = pairObj.targetDayIndex;
+
+        // Paar entfernen
+        vorkochenPairs.splice(pairIdx, 1);
+
+        // Falls Quelle weggeklickt -> den zugehörigen Folgetag aus dayData entfernen
+        if (isSourceClicked && targetDayIdx !== null && dayData[targetDayIdx]) {
+          dayData.splice(targetDayIdx, 1);
         }
-        mealDiv.classList.add(selectedForVorkochen.colorClass);
+
+        // Grid neu aufbauen
+        buildVorkochenGrid();
+        return;
+      }
+
+      // 2) Falls die Mahlzeit noch nicht Teil eines Paares ist
+      //    Prüfen, ob wir momentan eine "Quelle" ausgewählt haben
+      if (!selectedForVorkochen) {
+        // Dann wird das jetzt die Quelle
+        selectedForVorkochen = {
+          dayIndex,
+          mealIndex,
+          colorClass: pairColors[currentPairIndex]
+        };
+        // Pairing-Farbe und Krone anzeigen -> am einfachsten durch Neurendern
         vorkochenPairs.push({
-          sourceDayIndex: selectedForVorkochen.dayIndex,
-          sourceMealIndex: selectedForVorkochen.mealIndex,
-          targetDayIndex: dayIndex,
-          targetMealIndex: mealIndex,
+          sourceDayIndex: dayIndex,
+          sourceMealIndex: mealIndex,
+          targetDayIndex: null,
+          targetMealIndex: null,
           colorClass: selectedForVorkochen.colorClass
         });
-        selectedForVorkochen = null;
+        buildVorkochenGrid();
+      }
+      else {
+        // Es existiert bereits eine Quelle -> wir setzen das aktuelle Meal als Ziel
+        // Gleiche Mahlzeit kann nicht auch Ziel sein
+        if (
+          selectedForVorkochen.dayIndex === dayIndex && 
+          selectedForVorkochen.mealIndex === mealIndex
+        ) {
+          // Falls man aus Versehen nochmal auf dieselbe klickt, entfernen wir den Quell-Eintrag
+          const idx = vorkochenPairs.findIndex(p =>
+            p.sourceDayIndex === selectedForVorkochen.dayIndex &&
+            p.sourceMealIndex === selectedForVorkochen.mealIndex &&
+            p.targetDayIndex === null && 
+            p.targetMealIndex === null
+          );
+          if (idx >= 0) {
+            vorkochenPairs.splice(idx, 1);
+          }
+          selectedForVorkochen = null;
+          buildVorkochenGrid();
+          return;
+        }
+
+        // Sonst: Dies ist das Ziel
+        const pairNoTargetIdx = vorkochenPairs.findIndex(p =>
+          p.sourceDayIndex === selectedForVorkochen.dayIndex &&
+          p.sourceMealIndex === selectedForVorkochen.mealIndex &&
+          p.targetDayIndex === null
+        );
+
+        if (pairNoTargetIdx >= 0) {
+          vorkochenPairs[pairNoTargetIdx].targetDayIndex = dayIndex;
+          vorkochenPairs[pairNoTargetIdx].targetMealIndex = mealIndex;
+        }
+        // Pair komplett, nächste Farbe vorbereiten
         currentPairIndex = (currentPairIndex + 1) % pairColors.length;
+        selectedForVorkochen = null;
+        buildVorkochenGrid();
       }
     }
 
@@ -758,6 +642,12 @@
      * (7) Fleisch/Fisch-Liste
      ***********************************************/
     function buildFleischFischList() {
+      // Falls dayData leer ist, ebenfalls Hinweis geben
+      if (!dayData || dayData.length === 0) {
+        alert("Bitte zuerst einen Zeitraum auswählen und bestätigen!");
+        return;
+      }
+
       const container = document.getElementById("fleischFischList");
       container.innerHTML = "";
 
@@ -775,6 +665,8 @@
             <option value="">-- bitte wählen --</option>
             <option value="Fleisch">Fleisch</option>
             <option value="Fisch">Fisch</option>
+            <option value="Vegetarisch">Vegetarisch</option>
+            <option value="Vegan">Vegan</option>
           </select>
         `;
         container.appendChild(item);
@@ -836,7 +728,7 @@
       promptText += "\n";
 
       // Klarstellung Znüni / Zvieri
-      promptText += "Anmerkung: Znüni ist ein morgendlicher Snack (ca. 9 Uhr), Zvieri ist ein nachmittäglicher Snack.\n\n";
+      promptText += "Anmerkung: Znüni = morgendlicher Snack (~9 Uhr), Zvieri = nachmittäglicher Snack.\n\n";
 
       promptText += "Wünsche:\n";
       if (wunschVegan) promptText += "- Vegan\n";
@@ -854,15 +746,22 @@
 
       promptText += "Vorkochen-Paare:\n";
       vorkochenPairs.forEach((pair, i) => {
-        const sDay = dayData[pair.sourceDayIndex];
-        const sMeal = sDay.meals[pair.sourceMealIndex];
-        const tDay = dayData[pair.targetDayIndex];
-        const tMeal = tDay.meals[pair.targetMealIndex];
-        promptText += `- Paar #${i+1}: [Quelle] ${sDay.date} (${sMeal.name}, ${sMeal.portions}x) => [Ziel] ${tDay.date} (${tMeal.name}, ${tMeal.portions}x)\n`;
+        // Nur wenn Pair beides hat (Quelle + Ziel)
+        if (pair.targetDayIndex !== null) {
+          const sDay = dayData[pair.sourceDayIndex];
+          const sMeal = sDay.meals[pair.sourceMealIndex];
+
+          // Falls wir den Tag schon entfernt haben, existiert dayData[pair.targetDayIndex] evtl. nicht mehr
+          const tDay = dayData[pair.targetDayIndex];
+          if (!tDay) return;
+
+          const tMeal = tDay.meals[pair.targetMealIndex];
+          promptText += `- Paar #${i+1}: [Quelle] ${sDay.date} (${sMeal.name}, ${sMeal.portions}x) => [Ziel] ${tDay.date} (${tMeal.name}, ${tMeal.portions}x)\n`;
+        }
       });
       promptText += "\n";
 
-      promptText += "Fleisch/Fisch an folgenden Tagen:\n";
+      promptText += "Fleisch/Fisch/Vegetarisch/Vegan an folgenden Tagen:\n";
       for (const [dKey, val] of Object.entries(fleischFischData)) {
         promptText += `- ${dKey}: ${val}\n`;
       }
@@ -913,6 +812,25 @@
         }
         document.body.removeChild(textarea);
       }
+    }
+
+    /***********************************************
+     * Sections nach erfolgreicher Datumsauswahl anzeigen
+     ***********************************************/
+    function showOtherSections() {
+      document.getElementById("section2").style.display = "block";
+      document.getElementById("section3").style.display = "block";
+      document.getElementById("section4").style.display = "block";
+      document.getElementById("section5").style.display = "block";
+      document.getElementById("section6").style.display = "block";
+      document.getElementById("section7").style.display = "block";
+      
+
+      // final-buttons auch anzeigen
+        const finalBtns = document.getElementById("final-buttons-id");
+        if (finalBtns) {
+          finalBtns.style.display = "flex";
+        }
     }
   </script>
 </body>

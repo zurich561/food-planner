@@ -1,0 +1,317 @@
+/* ---------- Globales Layout & Farben ---------- */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+  
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        font-size: 16px;       /* Größere Schrift für mobile */
+        line-height: 1.4;      /* Angenehme Zeilenhöhe */
+        color: #333;
+        position: relative;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-image: url('abbey road veggies.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        filter: blur(2px);
+        opacity: 0.6;
+        z-index: -1;
+      }
+
+      .start-button {
+        background: #636B2F; /* Button-Farbe */
+        color: #fff;
+
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 2rem;
+        border-radius: 4px;
+        transition: background 0.2s ease-in-out;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem; /* Abstand nach unten zu den Boxen */
+      }
+  
+      /* Zurücksetzen-Button jetzt NICHT mehr position: absolute;
+         sondern normal im Dokumentenfluss */
+      #resetBtn {
+        background: #636B2F; /* Button-Farbe */
+        color: #fff;
+        border: none;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 4px;
+        transition: background 0.2s ease-in-out;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem; /* Abstand nach unten zu den Boxen */
+      }
+      #resetBtn:hover {
+        background: #BAC095; /* Hover-Farbe */
+      }
+  
+      main {
+        margin: 0 auto;
+      }
+
+      .hero-image-container {
+        height: 100vh;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #000000;
+        text-align: center;
+        font-size: 2rem;
+        overflow: hidden;  /* Prevent blur from extending outside */
+        font-weight: bold;
+    }
+    
+    .hero-image-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('abbey road veggies.jpg');
+        background-size: cover;
+        background-position: center;
+        filter: blur(2px);
+        opacity: 0.6;
+        z-index: -1;
+    }
+  
+      /* ---------- Container-Grid: bis zu 2 Spalten ---------- */
+    .container-grid {
+        display: grid; /* Verwende Grid */
+        max-width: 1300px;
+        grid-template-columns: repeat(2, 1fr); /* Standard: 2 Spalten */
+        gap: 2rem; /* Gleicher Abstand zwischen Spalten und Zeilen */
+        margin: 7px auto; /* Zentriere das Grid horizontal */
+        justify-items: center; /* Zentriere die Inhalte in den Zellen */
+    }
+    
+    /* Responsive: Nur 1 Spalte auf schmalen Geräten */
+    @media (max-width: 600px) {
+        .container-grid {
+        grid-template-columns: 1fr; /* Nur 1 Spalte */
+        }
+    }
+    
+    /* Styling für Karten */
+    .section-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        width: 100%; /* Passt sich der Spaltenbreite an */
+        max-width: 400px; /* Begrenze maximale Breite */
+        margin: 7px;
+    }
+  
+  
+      .section-card h2 {
+        margin-bottom: 0.8rem;
+        color: #3D4127; /* Akzentfarbe */
+        font-size: 1.1rem;
+      }
+  
+      /* ---------- Allgemeine Buttons (z.B. Tage generieren etc.) ---------- */
+      button {
+        background: #4d551a; /* Button-Farbe */
+        color: #fff;
+        border: none;
+        padding: 0.75rem 1.25rem;
+        cursor: pointer;
+        font-size: 1rem;
+        border-radius: 10px;
+        transition: background 0.2s ease-in-out;
+        margin-top: 1rem;
+      }
+      button:hover {
+        background: #BAC095; /* Hover-Farbe */
+      }
+  
+      /* ---------- Versteckt-Klasse ---------- */
+      .hidden {
+        display: none;
+      }
+  
+      /* ---------- Abschnitt 2: Tägliche Mahlzeiten/Portionen ---------- */
+      .meal-checkbox-group {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+      }
+      .meal-checkbox-group select {
+        margin-left: 0.5rem;
+      }
+  
+      /* ---------- Tagesliste (Ausnahmen) ---------- */
+      #dayList > div {
+        margin-bottom: 1rem;
+        font-size: 1rem;
+      }
+      .day-exception-meals {
+        margin-left: 1.5rem;
+        margin-top: 0.5rem;
+      }
+      .day-exception-meals select {
+        margin-left: 0.5rem;
+      }
+  
+      /* ---------- Wünsche (Abschnitt 4) ---------- */
+      #freeWishesContainer {
+        margin-top: 0.5rem;
+      }
+      #freeWishesContainer input[type="text"] {
+        margin: 0.3rem 0;
+        font-size: 1rem;
+      }
+  
+      /* ---------- Nährwerte (Abschnitt 5) ---------- */
+      #section5 label {
+        width: 130px;
+        font-weight: 600;
+        display: inline-block;
+        margin-right: 0.5rem;
+      }
+      #section5 input[type="number"] {
+        width: 100px;
+        margin-right: 0.5rem;
+      }
+  
+      /* ---------- Vorkochen (Abschnitt 6) ---------- */
+      .vorkochen-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+      .vorkochen-day {
+        background: #fdfdfd;
+        border: 1px solid #ddd;
+        padding: 0.8rem;
+        border-radius: 6px;
+        position: relative;
+        font-size: 1rem;
+      }
+      .vorkochen-day strong {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .vorkochen-meal {
+        border: 1px dashed #999;
+        margin: 0.4rem 0;
+        padding: 0.4rem;
+        border-radius: 4px;
+        cursor: pointer;
+        background: #fafafa;
+        transition: background 0.2s;
+      }
+      .vorkochen-meal:hover {
+        background: #f1f1f1;
+      }
+      .highlight-green {
+        background: #c3f3c3 !important; /* Hellgrün */
+      }
+      .highlight-blue {
+        background: #add8e6 !important; /* Hellblau */
+      }
+      .crown {
+        font-size: 1.2rem;
+        color: gold;
+        margin-right: 0.3rem;
+      }
+  
+      /* ---------- Fleisch/Fisch-Liste (Abschnitt 7) ---------- */
+      .fleschfisch-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        font-size: 1rem;
+      }
+      .fleschfisch-item {
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        background: #fafafa;
+        border-radius: 4px;
+      }
+      .fleschfisch-item select {
+        margin-left: 0.5rem;
+      }
+  
+      /* ---------- Modal/Popup ---------- */
+      #promptModal {
+        position: fixed;
+        top: 0; 
+        left: 0;
+        width: 100%; 
+        height: 100%; 
+        background: rgba(0,0,0,0.5);
+        display: none; /* Standard: versteckt */
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        overflow: auto; /* Falls Inhalte höher als Bildschirm */
+      }
+      #promptModal.active {
+        display: flex; /* Sichtbar, als Flex */
+      }
+      .modal-content {
+        background: #ffffff;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh; /* Nicht höher als 90% der Bildschirmhöhe */
+        padding: 1rem;
+        border-radius: 8px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+      }
+      .modal-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: #333;
+        font-weight: bold;
+      }
+      #promptText {
+        background: #f9f9f9;
+        padding: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        color: #333;
+        margin: 1rem 0;
+        flex: 1 1 auto;           /* Damit dieses Element den freien Platz nutzt */
+        overflow-y: auto;        /* Scrollbar, falls der Text zu lang ist */
+        font-size: 1rem;
+      }
+      #copyBtn {
+        align-self: flex-end;    /* Rechts unten platzieren */
+        margin-top: 0;
+      }
+
+      .final-buttons {
+        background-color: transparent; 
+        display: flex;
+        flex-direction: row; 
+        align-items: center; 
+        justify-content: center; 
+        box-shadow: none;
+      }
