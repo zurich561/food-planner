@@ -58,7 +58,7 @@
           <input type="checkbox" id="cbFruehstueck" 
                  onchange="togglePortionDropdown('cbFruehstueck','ddFruehstueck')">
           <label for="cbFruehstueck">Frühstück</label>
-          <select id="ddFruehstueck" class="hidden" onchange="getStandardMeals()">
+          <select id="ddFruehstueck" class="hidden" onchange="onStandardMealChanged()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -70,7 +70,7 @@
           <input type="checkbox" id="cbZnueni" 
                  onchange="togglePortionDropdown('cbZnueni','ddZnueni')">
           <label for="cbZnueni">Znüni</label>
-          <select id="ddZnueni" class="hidden" onchange="getStandardMeals()">
+          <select id="ddZnueni" class="hidden" onchange="onStandardMealChanged()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -82,7 +82,7 @@
           <input type="checkbox" id="cbMittag" 
                  onchange="togglePortionDropdown('cbMittag','ddMittag')">
           <label for="cbMittag">Mittagessen</label>
-          <select id="ddMittag" class="hidden" onchange="getStandardMeals()">
+          <select id="ddMittag" class="hidden" onchange="onStandardMealChanged()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -94,7 +94,7 @@
           <input type="checkbox" id="cbZvieri"
                  onchange="togglePortionDropdown('cbZvieri','ddZvieri')">
           <label for="cbZvieri">Zvieri</label>
-          <select id="ddZvieri" class="hidden" onchange="getStandardMeals()">
+          <select id="ddZvieri" class="hidden" onchange="onStandardMealChanged()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -106,7 +106,7 @@
           <input type="checkbox" id="cbAbend"
                  onchange="togglePortionDropdown('cbAbend','ddAbend')">
           <label for="cbAbend">Abendessen</label>
-          <select id="ddAbend" class="hidden" onchange="getStandardMeals()">
+          <select id="ddAbend" class="hidden" onchange="onStandardMealChanged()">
             <option value="">-- Portionen --</option>
             <option>1</option><option>2</option><option>3</option>
             <option>4</option><option>5</option><option>6</option>
@@ -322,6 +322,34 @@
       return meals;
     }
 
+        /***********************************************
+     * (2a) Standard-Tage aktualisieren (ohne neue Daylist)
+     ***********************************************/
+     function updateStandardDays() {
+      // Neue Standard-Meals abfragen
+      const newStdMeals = getStandardMeals();
+
+      // Nur Tage OHNE Ausnahme aktualisieren
+      dayData.forEach(day => {
+        if (!day.isException) {
+          // Überschreibe mit den aktuellen Standard-Meals
+          day.meals = JSON.parse(JSON.stringify(newStdMeals));
+        }
+      });
+      // Falls gewünscht: Refresh der Liste (damit man sieht, was geändert wurde)
+      renderDayList();
+    }
+
+    /***********************************************
+     * (2b) Event-Handler bei Änderung in Standard-Mahlzeiten
+     ***********************************************/
+    function onStandardMealChanged() {
+      // Hier aktualisieren wir nur die Standard-Tage, OHNE Ausnahmen zu zerstören.
+      if (dayData && dayData.length > 0) {
+        updateStandardDays();
+      }
+    }
+
     /***********************************************
      * (3) Generiere Tagesliste
      ***********************************************/
@@ -495,7 +523,7 @@
      * (6) Vorkochen-Kacheln
      ***********************************************/
     function buildVorkochenGrid() {
-      generateDayList(); // Sicherheitshalber neu rendern
+      //generateDayList(); // Sicherheitshalber neu rendern
 
       // 1) Prüfen, ob es überhaupt dayData gibt
       if (!dayData || dayData.length === 0) {
